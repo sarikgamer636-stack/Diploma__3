@@ -1,6 +1,6 @@
-from helpers.locators import LOGIN_BUTTON, LOGIN_EMAIL_INPUT, PASSWORD_INPUT
+from locators.login_page_locators import *
 from pages.base_page import BasePage
-
+from helpers.urls import LOGIN_PAGE
 
 class LoginPage(BasePage):
 
@@ -12,3 +12,10 @@ class LoginPage(BasePage):
 
     def click_login(self):
         self.click(LOGIN_BUTTON)
+
+    def login(self, email, password):
+        self.driver.get(LOGIN_PAGE)
+        self.close_modal()
+        self.set_email(email)
+        self.set_password(password)
+        self.click_login()

@@ -1,9 +1,8 @@
-from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait as Wait
-import time
-from helpers.locators import *
+from locators.main_page_locators import *
+from locators.base_page_locators import *
+from helpers.urls import MAIN_PAGE
 from pages.base_page import BasePage
-
 
 class MainPage(BasePage):
 
@@ -34,7 +33,7 @@ class MainPage(BasePage):
     def add_ingredient_to_order(self):
         source = self.find_element(INGREDIENT)
         target = self.find_element(CONSTRUCTOR_BASKET)
-        self.driver.execute_script(
+        self.execute_script(
             """
             const source = arguments[0];
             const target = arguments[1];
@@ -50,7 +49,6 @@ class MainPage(BasePage):
             source,
             target,
         )
-        time.sleep(2)
 
     def click_enter_account(self):
         self.click(ENTER_ACCOUNT_BUTTON)
@@ -59,8 +57,18 @@ class MainPage(BasePage):
         self.click(ORDER_BUTTON)
 
     def get_order_number(self):
-        time.sleep(5)
         Wait(self.driver, 30).until(
             lambda driver: self.get_text(ORDER_NUMBER) not in ("", "9999")
         )
         return self.get_text(ORDER_NUMBER)
+
+    def make_order(self):
+        self.wait_loading_gone()
+        self.wait_visible(ORDER_BUTTON, 30)
+        self.main_title_is_visible()
+        self.add_ingredient_to_order()
+        self.wait_clickable(ORDER_BUTTON, 30).click()
+        return self.get_order_number()
+
+    def open_constructor(self):  # изменение
+        self.open(MAIN_PAGE)
