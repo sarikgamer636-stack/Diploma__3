@@ -1,4 +1,3 @@
-from selenium.webdriver.support.ui import WebDriverWait as Wait
 from locators.main_page_locators import *
 from locators.base_page_locators import *
 from helpers.urls import MAIN_PAGE
@@ -57,8 +56,10 @@ class MainPage(BasePage):
         self.click(ORDER_BUTTON)
 
     def get_order_number(self):
-        Wait(self.driver, 30).until(
-            lambda driver: self.get_text(ORDER_NUMBER) not in ("", "9999")
+        self.wait_visible(ORDER_NUMBER, 30)
+        self.wait_for(
+            lambda _driver: self.get_text(ORDER_NUMBER) not in ("", "9999"),
+            30,
         )
         return self.get_text(ORDER_NUMBER)
 

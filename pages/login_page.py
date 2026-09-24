@@ -1,6 +1,7 @@
 from locators.login_page_locators import *
 from pages.base_page import BasePage
 from helpers.urls import LOGIN_PAGE
+from locators.main_page_locators import ORDER_BUTTON
 
 class LoginPage(BasePage):
 
@@ -14,8 +15,10 @@ class LoginPage(BasePage):
         self.click(LOGIN_BUTTON)
 
     def login(self, email, password):
-        self.driver.get(LOGIN_PAGE)
+        self.open(LOGIN_PAGE)
         self.close_modal()
         self.set_email(email)
         self.set_password(password)
         self.click_login()
+        self.wait_loading_gone()
+        self.wait_visible(ORDER_BUTTON)

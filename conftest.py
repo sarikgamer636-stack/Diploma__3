@@ -11,9 +11,7 @@ def driver_chrome():
     driver = webdriver.Chrome(service=service)
     driver.maximize_window()
     yield driver
-    delete_user(driver)
     driver.quit()
-
 
 @pytest.fixture
 def driver_firefox():
@@ -24,5 +22,18 @@ def driver_firefox():
     driver = webdriver.Firefox(options=options)
     driver.maximize_window()
     yield driver
-    delete_user(driver)
     driver.quit()
+
+@pytest.fixture
+def chrome_with_user(driver_chrome):
+    yield driver_chrome
+    token = getattr(driver_chrome, "access_token", None)
+    if token:
+        delete_user(token)
+
+@pytest.fixture
+def firefox_with_user(driver_firefox):
+    yield driver_firefox
+    token = getattr(driver_firefox, "access_token", None)
+    if token:
+        delete_user(token)

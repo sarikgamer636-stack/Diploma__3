@@ -9,7 +9,5 @@ def register_user():
     token = response.json().get("accessToken")
     return email, token
 
-def delete_user(driver):
-    token = getattr(driver, "access_token", None)
-    if token:
-        requests.delete(API_USER, headers={"Authorization": token}, timeout=20)
+def delete_user(token):
+    return requests.delete(API_USER, headers={"Authorization": token}, timeout=20)
